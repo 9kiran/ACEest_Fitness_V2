@@ -40,9 +40,9 @@ jobs:
         file: ./coverage.xml
         fail_ci_if_error: true
 
-  sonarqube:
-    name: SonarQube
-    runs-on: windows-latest
+  sonarcloud:
+    needs: build-test
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
@@ -51,9 +51,9 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@v6
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
+          
   docker-build:
-    needs: sonarqube
+    needs: sonarcloud
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
