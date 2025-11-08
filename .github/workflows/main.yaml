@@ -40,8 +40,25 @@ jobs:
         file: ./coverage.xml
         fail_ci_if_error: true
 
-  docker-build:
+  sonarcloud:
     needs: build-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectKey=ACEest_Fitness_V2
+            -Dsonar.organization=9kiran
+            -Dsonar.python.coverage.reportPaths=coverage.xml
+            -Dsonar.sources=aceest_fitness_v
+
+  docker-build:
+    needs: sonarcloud
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
