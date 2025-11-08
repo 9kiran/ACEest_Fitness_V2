@@ -1,0 +1,61 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ "*" ]
+  pull_request:
+    branches: [ "*" ]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run tests with coverage
+        run: |
+          source venv/bin/activate
+          pytest --cov=aceest_fitness --cov-report=xml --cov-report=term-missing
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage.xml
+
+  docker-build:
+    needs: build-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: |
+          docker build -t aceest_fitness:latest .
+
+      # Optional: push image to Docker Hub (enable later)
+      # - name: Log in to Docker Hub
+      #   uses: docker/login-action@v3
+      #   with:
+      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
+      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
+      #
+      # - name: Push image
+      #   run: |
+      #     docker tag aceest_fitness:latest ${{ secrets.DOCKERHUB_USERNAME }}/aceest_fitness:latest
+      #     docker push ${{ secrets.DOCKERHUB_USERNAME }}/aceest_fitness:latest

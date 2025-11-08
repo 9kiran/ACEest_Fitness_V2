@@ -1,0 +1,4 @@
+matplotlib==3.7.1       # plotting (optional, GUI graphs)
+reportlab==3.6.12       # PDF generation
+pytest==8.0.0           # testing
+pytest-cov==5.0.0       # coverage reporting
