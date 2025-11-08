@@ -51,14 +51,14 @@ jobs:
         run: |
           docker build -t aceest_fitness:latest .
 
-      # Optional: push image to Docker Hub (enable later)
-      # - name: Log in to Docker Hub
-      #   uses: docker/login-action@v3
-      #   with:
-      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
-      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
-      #
-      # - name: Push image
-      #   run: |
-      #     docker tag aceest_fitness:latest ${{ secrets.DOCKERHUB_USERNAME }}/aceest_fitness:latest
-      #     docker push ${{ secrets.DOCKERHUB_USERNAME }}/aceest_fitness:latest
+      
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      
+      - name: Push image
+        run: |
+          docker tag aceest_fitness:latest ${{ secrets.DOCKERHUB_USERNAME }}/aceest_fitness:v1
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/aceest_fitness:v1
