@@ -40,7 +40,7 @@ jobs:
         file: ./coverage.xml
         fail_ci_if_error: true
 
-  sonarcloud:
+  sonarqube:
     name: SonarQube
     runs-on: windows-latest
     steps:
@@ -53,7 +53,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   docker-build:
-    needs: sonarcloud
+    needs: sonarqube
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
