@@ -55,7 +55,7 @@ jobs:
             -Dsonar.projectKey=ACEest_Fitness_V2
             -Dsonar.organization=9kiran
             -Dsonar.python.coverage.reportPaths=coverage.xml
-            -Dsonar.sources=aceest_fitness_v2
+            -Dsonar.sources=aceest_fitness
 
   docker-build:
     needs: sonarcloud
