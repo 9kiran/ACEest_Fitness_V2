@@ -1,7 +1,5 @@
 # ACEest Fitness Tracker – DevOps Assignment
 
-[![CI/CD Pipeline](https://github.com/9kiran/ACEest_Fitness_V2/actions/workflows/main.yml/badge.svg)](https://github.com/9kiran/ACEest_Fitness_V2/actions)  
-[![Coverage](https://img.shields.io/badge/Coverage-TBD-brightgreen)](https://sonarcloud.io/summary/overall?id=9kiran_ACEest_Fitness_V2&branch=main)  
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=9kiran_ACEest_Fitness_V2&metric=alert_status)](https://sonarcloud.io/summary/overall?id=9kiran_ACEest_Fitness_V2&branch=main)
 [![Coverage Status](https://codecov.io/gh/9kiran/ACEest_Fitness_V2/branch/main/graph/badge.svg)](https://codecov.io/gh/9kiran/ACEest_Fitness_V2)
 
@@ -116,3 +114,4 @@ Manifests available under `k8s/` folder demonstrate:
 Would you like me to **generate the actual badge URL for coverage** once your SonarCloud shows the final coverage percentage?
 ::contentReference[oaicite:0]{index=0}
 ```
+
