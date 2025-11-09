@@ -1,44 +1,59 @@
-name: CI Pipeline
+name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ "*" ]
+    branches:
+      - "**"      # run on every branch
   pull_request:
-    branches: [ "*" ]
+    branches:
+      - "**"
 
 jobs:
   build-test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    # Checkout repo
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
+    # Set up Python
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.10"
 
-      - name: Install dependencies
-        run: |
-          python -m venv venv
-          source venv/bin/activate
-          pip install --upgrade pip
-          pip install -r requirements.txt
+    # Install dependencies
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
 
-      - name: Run tests with coverage
-        run: |
-          source venv/bin/activate
-          pytest --cov=aceest_fitness --cov-report=xml --cov-report=term-missing
+    # Run tests with coverage
+    - name: Run tests with coverage
+      run: |
+        PYTHONPATH=. pytest --cov=aceest_fitness --cov-report=xml --cov-report=term-missing
 
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: coverage.xml
+    # Upload coverage to Codecov (optional, works only if you enable Codecov)
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        file: ./coverage.xml
+        fail_ci_if_error: true
 
-  docker-build:
+  sonarcloud:
     needs: build-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v6
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          
+  docker-build:
+    needs: sonarcloud
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -48,14 +63,14 @@ jobs:
         run: |
           docker build -t aceest_fitness:latest .
 
-      # Optional: push image to Docker Hub (enable later)
-      # - name: Log in to Docker Hub
-      #   uses: docker/login-action@v3
-      #   with:
-      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
-      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
-      #
-      # - name: Push image
-      #   run: |
-      #     docker tag aceest_fitness:latest ${{ secrets.DOCKERHUB_USERNAME }}/aceest_fitness:latest
-      #     docker push ${{ secrets.DOCKERHUB_USERNAME }}/aceest_fitness:latest
+      
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      
+      - name: Push image
+        run: |
+          docker tag aceest_fitness:latest ${{ secrets.DOCKERHUB_USERNAME }}/aceest_fitness:v1
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/aceest_fitness:v1
