@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aceest-fitness-blue
+  labels:
+    app: aceest-fitness
+    version: blue
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aceest-fitness
+      version: blue
+  template:
+    metadata:
+      labels:
+        app: aceest-fitness
+        version: blue
+    spec:
+      containers:
+        - name: aceest-fitness
+          image: 9kiran/aceest_fitness:v1
+          ports:
+            - containerPort: 5000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aceest-fitness-green
+  labels:
+    app: aceest-fitness
+    version: green
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aceest-fitness
+      version: green
+  template:
+    metadata:
+      labels:
+        app: aceest-fitness
+        version: green
+    spec:
+      containers:
+        - name: aceest-fitness
+          image: 9kiran/aceest_fitness:v2
+          ports:
+            - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aceest-fitness-bg-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: aceest-fitness
+    version: green   # switch here to 'blue' or 'green' during deployment cutover
+  ports:
+    - port: 80
+      targetPort: 5000
