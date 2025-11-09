@@ -105,13 +105,4 @@ Manifests available under `k8s/` folder demonstrate:
 * SonarCloud Dashboard: [https://sonarcloud.io/summary/overall?id=9kiran_ACEest_Fitness_V2&branch=main](https://sonarcloud.io/summary/overall?id=9kiran_ACEest_Fitness_V2&branch=main)
 * Docker Hub: [https://hub.docker.com/r/9kiranpatil/aceest_fitness](https://hub.docker.com/r/9kiranpatil/aceest_fitness)
 
-## Student Info
-
-**Name:** Kiran Patil
-**Course:** Introduction to DevOps (CSIZG514/SEZG514)
-**Assignment:** Phase 1 – DevOps Project
-**Submission Date:** *[Insert date here]*
-Would you like me to **generate the actual badge URL for coverage** once your SonarCloud shows the final coverage percentage?
-::contentReference[oaicite:0]{index=0}
-```
 
